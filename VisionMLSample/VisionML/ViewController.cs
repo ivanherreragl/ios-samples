@@ -26,14 +26,19 @@ namespace VisionML
 
         partial void ChooseImage(UIBarButtonItem sender)
         {
-            throw new NotImplementedException();
+			var picker = new UIImagePickerController();
+			picker.Delegate = this;
+			picker.SourceType = UIImagePickerControllerSourceType.SavedPhotosAlbum;
+			PresentViewController(picker, true, () => { });
         }
 
-        partial void TakePicture(UIBarButtonItem sender)
+
+		partial void TakePicture(UIBarButtonItem sender)
         {
             var picker = new UIImagePickerController();
             picker.Delegate = this;
-            picker.SourceType = UIImagePickerControllerSourceType.SavedPhotosAlbum;
+            picker.SourceType = UIImagePickerControllerSourceType.Camera;
+            picker.CameraCaptureMode = UIImagePickerControllerCameraCaptureMode.Photo;
             PresentViewController(picker, true, ()=>{});
         }
 
