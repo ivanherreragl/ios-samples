@@ -3,21 +3,45 @@
 using Foundation;
 using UIKit;
 
-namespace AVMetadataRecordPlay.Assets
+namespace AVMetadataRecordPlay
 {
     public partial class AssetGridViewCell : UICollectionViewCell
     {
         public static readonly NSString Key = new NSString("AssetGridViewCell");
-        public static readonly UINib Nib;
+		UIImage thumbnailImage;
+		public UIImage ThumbnailImage
+		{
+			get
+			{
+				return thumbnailImage;
+			}
+			set
+			{
+				thumbnailImage = value;
+				imageView.Image = thumbnailImage;
+			}
+		}
 
-        static AssetGridViewCell()
-        {
-            Nib = UINib.FromName("AssetGridViewCell", NSBundle.MainBundle);
-        }
 
-        protected AssetGridViewCell(IntPtr handle) : base(handle)
+
+		public string RepresentedAssetIdentifier { get; set; }
+
+		[Export("initWithCoder:")]
+		public AssetGridViewCell(NSCoder coder)
+            : base (coder)
         {
-            // Note: this .ctor should not contain any initialization logic.
-        }
+		}
+
+		public AssetGridViewCell(IntPtr handle)
+            : base (handle)
+        {
+		}
+
+		public override void PrepareForReuse()
+		{
+			base.PrepareForReuse();
+			imageView.Image = null;
+			
+		}
     }
 }

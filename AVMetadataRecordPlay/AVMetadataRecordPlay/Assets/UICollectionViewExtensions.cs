@@ -5,7 +5,7 @@ using UIKit;
 using Foundation;
 using CoreGraphics;
 
-namespace SamplePhotoApp
+namespace AVMetadataRecordPlay
 {
 	public static class UICollectionViewExtensions
 	{

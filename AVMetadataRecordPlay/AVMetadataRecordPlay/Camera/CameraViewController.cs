@@ -129,7 +129,7 @@ namespace AVMetadataRecordPlay.Camera
 
         public override void ViewWillTransitionToSize(CoreGraphics.CGSize toSize, IUIViewControllerTransitionCoordinator coordinator){
             base.ViewWillTransitionToSize(toSize, coordinator);
-            var videoPreviewLayerConnection = previewView.videoPreviewLayer.Connection;
+            var videoPreviewLayerConnection = previewView.VideoPreviewLayer.Connection;
             if (videoPreviewLayerConnection != null){
                 coordinator.AnimateAlongsideTransition((context)=>{
                     var interfaceOrientation = UIApplication.SharedApplication.StatusBarOrientation;

@@ -165,7 +165,7 @@ namespace AVMetadataRecordPlay.Player
             playerItem.AddOutput(ItemMetadataOutput);
 
             if (Player != null){
-                Player.ReplaceCurrentItemWithPlayerItem(playerItem)
+                Player.ReplaceCurrentItemWithPlayerItem(playerItem);
             }else{
                 // Create AVPlayer with the generated instance of playerItem. Also add the facesLayer as subLayer to this playLayer.
                 Player = AVPlayer.FromPlayerItem(playerItem);
