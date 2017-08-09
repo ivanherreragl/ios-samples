@@ -212,7 +212,7 @@ namespace AVMetadataRecordPlay
 
         UIAlertController LoadingAssetAlertController = null;
 
-        AVAsset SelectedAsset = null;
+        public AVAsset SelectedAsset = null;
 
 		private void ResetCachedAssets(){
             ImageManager.StopCaching();

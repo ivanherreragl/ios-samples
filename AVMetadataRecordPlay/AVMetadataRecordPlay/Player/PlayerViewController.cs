@@ -57,9 +57,9 @@ namespace AVMetadataRecordPlay.Player
 
 		}
 
-		// MARK: Segue
+        // MARK: Segue
 
-		/*
+        /*
 
 
     @IBAction func unwindBackToPlayer(segue: UIStoryboardSegue) {
@@ -77,6 +77,18 @@ namespace AVMetadataRecordPlay.Player
          */
 
 
+        [Action("unwindBackToPlayer:")]
+        public void UnwindBackToPlayer(UIStoryboardSegue segue)
+        {
+            var assetGridViewController = (AssetGridViewController)segue.SourceViewController;
+            if (assetGridViewController.SelectedAsset != null){
+                var selectedAsset = assetGridViewController.SelectedAsset;
+                if (selectedAsset != PlayerAsset){
+                    SetupPlayback(selectedAsset);
+                    PlayerAsset = selectedAsset;
+                }
+            }
+        }
 
 		// MARK: Player
 

@@ -286,7 +286,7 @@
                         <barButtonItem key="rightBarButtonItem" title="Library" id="520">
                             <connections>
                                 <action selector="UIBarButtonItem520_Activated:" destination="126" id="521"/>
-                                <segue id="572" destination="509" kind="show"/>
+                                <segue id="572" destination="509" kind="show" identifier="backToPlayer"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
