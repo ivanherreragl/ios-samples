@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-
+using CoreMedia;
 using UIKit;
 using AVFoundation;
 using CoreFoundation;
@@ -35,7 +35,7 @@ namespace AVMetadataRecordPlay.Camera
             cameraButton.Enabled = false;
             recordButton.Enabled = false;
 
-            previewView.session = session;
+            previewView.Session = session;
 
             switch (AVCaptureDevice.GetAuthorizationStatus(AVMediaType.Video))
             {
@@ -66,7 +66,7 @@ namespace AVMetadataRecordPlay.Camera
                 this.ConfigureSession();
             });
 
-            locationManager.Delegate = (CLLocationManagerDelegate)Self;
+            locationManager.Delegate = this;
             locationManager.RequestWhenInUseAuthorization();
             locationManager.DistanceFilter = CLLocationDistance.FilterNone;
             locationManager.HeadingFilter = 5.0;
@@ -84,7 +84,7 @@ namespace AVMetadataRecordPlay.Camera
                 switch (setupResult)
                 {
                     case SessionSetupResult.success:
-                        this.AddObservers;
+                        this.AddObservers();
                         this.session.StartRunning();
                         this.isSessionRunning = this.session.Running;
                         break;
@@ -608,18 +608,41 @@ namespace AVMetadataRecordPlay.Camera
 
         #region Metadata Support
 
+        AVCaptureMetadataInput locationMetadataInput = null;
+
         private void ConnectMetadataPorts()
         {
-            var specs = new string[] {CoreMedia.CMMetadataFormatDescription.FromMetadataSpecifications(null,new string[]{"asd"});};
+            if (!IsConnectionActiveWithInputPort(CMMetadataDataType.QuickTimeMetadataLocation_ISO6709)){
+                var specs = NSDictionary.FromObjectsAndKeys(new NSString[] {CMMetadataIdentifier.QuickTimeMetadataLocation_ISO6709, CMMetadataDataType.QuickTimeMetadataLocation_ISO6709 }, 
+                                                            new NSString[] {CMMetadataFormatDescriptionMetadataSpecificationKey.Identifier, CMMetadataFormatDescriptionMetadataSpecificationKey.DataType });
+                var specsArray = NSArray.FromObjects(new NSDictionary[] { specs });
+                var locationMetedataDesc = CMMetadataFormatDescription.FromMetadataSpecifications(CMMetadataFormatType.Boxed, specsArray);
+                var newLocationMetadataInput = new AVCaptureMetadataInput(locationMetedataDesc, CMClock.HostTimeClock);
+                session.AddInputWithNoConnections(newLocationMetadataInput);
+
+                var inputPort = newLocationMetadataInput.Ports[0];
+                session.AddConnection(AVCaptureConnection.FromInputPorts(new AVCaptureInputPort[]{inputPort}, movieFileOutput));
+                locationMetadataInput = newLocationMetadataInput;
+
+            }
+
+            //Face Metadata
+            if (!IsConnectionActiveWithInputPort((NSString)"AVMetadataIdentifierQuickTimeMetadataDetectedFace")){
+                ConnectSpecificMetadataPort((NSString)"AVMetadataIdentifierQuickTimeMetadataDetectedFace");
+            }
+
+
 
         }
 
-        private void ConnectSpecificMetadataPort (NSString metadataIdentifier){
+		
+		private void ConnectSpecificMetadataPort (NSString metadataIdentifier){
             foreach (var inputPort in videoDeviceInput.Ports){
                 if (inputPort.FormatDescription != null && inputPort.FormatDescription.MediaType == CoreMedia.CMMediaType.Metadata){
                     var metadataIdentifiers = ((CoreMedia.CMMetadataFormatDescription)inputPort.FormatDescription).GetIdentifiers();
                     if (metadataIdentifiers.Contains(metadataIdentifier)){
                         var connection = AVCaptureConnection.FromInputPorts(new AVCaptureInputPort[]{inputPort}, movieFileOutput);
+                            session.AddConnection(connection);
                     }
                 }
             }
@@ -647,85 +670,6 @@ namespace AVMetadataRecordPlay.Camera
 
  
 
-		/*
-		  
-
-		 
-		 * 
-		 * 
-		 * private func connectMetadataPorts() {
-        // Location metadata
-        if !isConnectionActiveWithInputPort(AVMetadataIdentifierQuickTimeMetadataLocationISO6709) {
-            // Create a format description for the location metadata.
-            let specs = [kCMMetadataFormatDescriptionMetadataSpecificationKey_Identifier as String: AVMetadataIdentifierQuickTimeMetadataLocationISO6709,
-                         kCMMetadataFormatDescriptionMetadataSpecificationKey_DataType as String: kCMMetadataDataType_QuickTimeMetadataLocation_ISO6709 as String]
-            
-            var locationMetadataDesc: CMFormatDescription?
-            CMMetadataFormatDescriptionCreateWithMetadataSpecifications(kCFAllocatorDefault, kCMMetadataFormatType_Boxed, [specs] as CFArray, &locationMetadataDesc)
-            
-            // Create the metadata input and add it to the session.
-            guard let newLocationMetadataInput = AVCaptureMetadataInput(formatDescription: locationMetadataDesc, clock: CMClockGetHostTimeClock())
-                else {
-                    print("Unable to obtain metadata input.")
-                    return
-            }
-            session.addInputWithNoConnections(newLocationMetadataInput)
-            
-            // Connect the location metadata input to the movie file output.
-            let inputPort = newLocationMetadataInput.ports[0]
-            session.add(AVCaptureConnection(inputPorts: [inputPort], output: movieFileOutput))
-            
-            locationMetadataInput = newLocationMetadataInput
-        }
-        
-        // Face metadata
-        if !isConnectionActiveWithInputPort(AVMetadataIdentifierQuickTimeMetadataDetectedFace) {
-            connectSpecificMetadataPort(AVMetadataIdentifierQuickTimeMetadataDetectedFace)
-        }
-    }
-    
-
-		private func connectSpecificMetadataPort(_ metadataIdentifier: String)
-		{
-
-			// Iterate over the videoDeviceInput's ports (individual streams of media data) and find the port that matches metadataIdentifier.
-			for inputPort in videoDeviceInput.ports as! [AVCaptureInputPort] {
-
-				guard(inputPort.formatDescription != nil) && (CMFormatDescriptionGetMediaType(inputPort.formatDescription) == kCMMediaType_Metadata),
-                let metadataIdentifiers = CMMetadataFormatDescriptionGetIdentifiers(inputPort.formatDescription) as NSArray? else {
-					continue
-
-			}
-
-				if metadataIdentifiers.contains(metadataIdentifier) {
-					// Add an AVCaptureConnection to connect the input port to the AVCaptureOutput (movieFileOutput).
-					if let connection = AVCaptureConnection(inputPorts: [inputPort], output: movieFileOutput) {
-						session.add(connection)
-	
-				}
-				}
-			}
-		}
-
-
-		private func isConnectionActiveWithInputPort(_ portType: String) -> Bool {
-        
-        for connection in movieFileOutput.connections as! [AVCaptureConnection] {
-            for inputPort in connection.inputPorts as! [AVCaptureInputPort] {
-                if let formatDescription = inputPort.formatDescription, CMFormatDescriptionGetMediaType(formatDescription) == kCMMediaType_Metadata {
-                    if let metadataIdentifiers = CMMetadataFormatDescriptionGetIdentifiers(inputPort.formatDescription) as NSArray? {
-                        if metadataIdentifiers.contains(portType) {
-                            return connection.isActive
-                        }
-                    }
-                }
-            }
-        }
-        
-        return false
-    }
-
-         */
 
 		#endregion
 
@@ -733,6 +677,10 @@ namespace AVMetadataRecordPlay.Camera
 
 
 		private CLLocationManager locationManager = new CLLocationManager();
+
+        public virtual void LocationsUpdated(CLLocationManager manager, CLLocation[] locations){
+            
+        }
 
 
         #endregion
@@ -763,23 +711,100 @@ namespace AVMetadataRecordPlay.Camera
 		}
         private void SessionWasInterrupted(NSNotification notification)
         {
-            
+			// In some scenarios we want to enable the user to resume the session running.
+			// For example, if music playback is initiated via control center while using AVCam,
+			// then the user can let AVCam resume the session running, which will stop music playback.
+			// Note that stopping music playback in control center will not automatically resume the session running.
+			// Also note that it is not always possible to resume, see ResumeInterruptedSession.
+			var reason = (AVCaptureSessionInterruptionReason)((NSNumber)notification.UserInfo[AVCaptureSession.InterruptionReasonKey]).Int32Value;
+			Console.WriteLine("Capture session was interrupted with reason {0}", reason);
+
+			var showResumeButton = false;
+
+			if (reason == AVCaptureSessionInterruptionReason.AudioDeviceInUseByAnotherClient ||
+				reason == AVCaptureSessionInterruptionReason.VideoDeviceInUseByAnotherClient)
+			{
+				showResumeButton = true;
+			}
+			else if (reason == AVCaptureSessionInterruptionReason.VideoDeviceNotAvailableWithMultipleForegroundApps)
+			{
+				// Simply fade-in a label to inform the user that the camera is unavailable.
+                cameraUnavailableLabel.Alpha = 0;
+				cameraUnavailableLabel.Hidden = false;
+				UIView.Animate(0.25, () => cameraUnavailableLabel.Alpha = 1);
+			}
+
+			if (showResumeButton)
+			{
+				// Simply fade-in a button to enable the user to try to resume the session running.
+				resumeButton.Alpha = 0;
+				resumeButton.Hidden = false;
+				UIView.Animate(0.25, () => resumeButton.Alpha = 1);
+			}
         }
+
+
+
 		private void SessionInterruptionEnded(NSNotification notification)
 		{
-
+			Console.WriteLine("Capture session interruption ended");
+            if (!resumeButton.Hidden)
+			{
+				UIView.AnimateNotify(0.25,
+					() => resumeButton.Alpha = 0,
+					success => resumeButton.Hidden = true);
+			}
+            if (!cameraUnavailableLabel.Hidden)
+			{
+				UIView.AnimateNotify(0.25,
+                                     () => cameraUnavailableLabel.Alpha = 0,
+                                     success => cameraUnavailableLabel.Hidden = true);
+			}
 		}
 		private void DeviceOrientationDidChange(NSNotification notification)
 		{
-
+            var deviceOrientation = UIDevice.CurrentDevice.Orientation;
+            if (deviceOrientation.IsPortrait() || deviceOrientation.IsLandscape()){
+                AVCaptureVideoOrientation videoOrientation;
+                TryConvertToVideoOrientation(deviceOrientation, out videoOrientation);
+                movieFileOutput.ConnectionFromMediaType(AVMediaType.Video).VideoOrientation = videoOrientation;
+            }
 		}
+
+
 		private void SubjectAreaDidChange(NSNotification notification)
 		{
-
+			var devicePoint = new CGPoint(0.5, 0.5);
+            Focus(AVCaptureFocusMode.AutoFocus, AVCaptureExposureMode.ContinuousAutoExposure, devicePoint, false);
 		}
 		private void SessionRuntimeError(NSNotification notification)
 		{
+			var error = (NSError)notification.UserInfo[AVCaptureSession.ErrorKey];
+			if (error == null)
+				return;
 
+			Console.WriteLine($"Capture session runtime error: {error.LocalizedDescription}");
+
+			// Automatically try to restart the session running if media services were reset and the last start running succeeded.
+			// Otherwise, enable the user to try to resume the session running.
+			if (error.Code == (int)AVError.MediaServicesWereReset)
+			{
+				sessionQueue.DispatchAsync(() => {
+                    if (isSessionRunning)
+					{
+						session.StartRunning();
+                        isSessionRunning = session.Running;
+					}
+					else
+					{
+						DispatchQueue.MainQueue.DispatchAsync(() => resumeButton.Hidden = false);
+					}
+				});
+			}
+			else
+			{
+				resumeButton.Hidden = false;
+			}
 		}
 
 		#endregion
@@ -789,20 +814,7 @@ namespace AVMetadataRecordPlay.Camera
 
 */
 
-		#region IAVCaptureFileOutputRecordingDelegate
 
-		[Export("captureOutput:didStartRecordingToOutputFileAtURL:fromConnections:")]
-		public void DidStartRecording(AVCaptureFileOutput captureOutput, NSUrl outputFileUrl, NSObject[] connections)
-		{
-			
-		}
-
-		public void FinishedRecording(AVCaptureFileOutput captureOutput, NSUrl outputFileUrl, NSObject[] connections, NSError error)
-		{
-			
-		}
-
-		#endregion
 
 		static bool TryConvertToVideoOrientation(UIDeviceOrientation orientation, out AVCaptureVideoOrientation result)
 		{

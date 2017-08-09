@@ -92,6 +92,7 @@
     <Folder Include="Resources\" />
     <Folder Include="Camera\" />
     <Folder Include="Player\" />
+    <Folder Include="Assets\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -117,6 +118,15 @@
     <Compile Include="PreviewView.designer.cs">
       <DependentUpon>PreviewView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Assets\AssetGridViewController.cs" />
+    <Compile Include="Assets\AssetGridViewController.designer.cs">
+      <DependentUpon>AssetGridViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Assets\AssetGridViewCell.cs" />
+    <Compile Include="Assets\AssetGridViewCell.designer.cs">
+      <DependentUpon>AssetGridViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Assets\UICollectionViewExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
