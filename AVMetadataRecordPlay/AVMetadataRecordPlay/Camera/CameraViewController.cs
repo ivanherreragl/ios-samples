@@ -679,7 +679,41 @@ namespace AVMetadataRecordPlay.Camera
 		private CLLocationManager locationManager = new CLLocationManager();
 
         public virtual void LocationsUpdated(CLLocationManager manager, CLLocation[] locations){
-            
+            if (movieFileOutput.Recording){
+                var newLocation = locations.Last();
+                if (newLocation == null) return;
+                if (!newLocation.Coordinate.IsValid()) return;
+                string iso6709Geolocation;
+                var newLocationMetadataItem = new AVMutableMetadataItem();
+                newLocationMetadataItem.MetadataIdentifier = CMMetadataIdentifier.QuickTimeMetadataLocation_ISO6709;
+                newLocationMetadataItem.DataType = CMMetadataDataType.QuickTimeMetadataLocation_ISO6709;
+
+                // CoreLocation objects contain altitude information as well if the verticalAccuracy is positive.
+                if (newLocation.VerticalAccuracy < 0.0){
+                    iso6709Geolocation = $"{newLocation.Coordinate.Latitude:+08.41}{newLocation.Coordinate.Longitude:+09.41}";
+
+				}else{
+                    iso6709Geolocation = $"{newLocation.Coordinate.Latitude:+08.41}{newLocation.Coordinate.Longitude:+09.41}{newLocation.Altitude:+08.31}";
+                }
+                newLocationMetadataItem.Value = (NSString)iso6709Geolocation;
+
+                var timeRange = new CMTimeRange();
+                timeRange.Start = CMClock.HostTimeClock.Time;
+                timeRange.Duration = CMTime.Invalid;
+
+
+                var metadataItemGroup = new AVTimedMetadataGroup(new AVMetadataItem[] { newLocationMetadataItem }, timeRange);
+
+                NSError err;
+
+                locationMetadataInput.AppendTimedMetadataGroup(metadataItemGroup, out err);
+
+				if (err != null)
+				{
+					
+					Console.WriteLine($"Could not add timed metadata group: {err.LocalizedDescription}");
+				}
+			}
         }
 
 
