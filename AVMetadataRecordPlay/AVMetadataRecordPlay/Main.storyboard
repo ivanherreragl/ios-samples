@@ -211,7 +211,7 @@
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="470"/>
                                     <barButtonItem style="plain" id="497">
-                                        <view contentMode="scaleToFill" id="496" translatesAutoresizingMaskIntoConstraints="NO" key="customView">
+                                        <view contentMode="scaleToFill" id="496" translatesAutoresizingMaskIntoConstraints="NO" key="customView" ambiguous="YES">
                                             <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -347,7 +347,7 @@
                         <barButtonItem key="rightBarButtonItem" title="Select" id="1056">
                             <connections>
                                 <action selector="UIBarButtonItem1056_Activated:" destination="509" id="1057"/>
-                                <segue id="1059" destination="1050" kind="unwind" unwindAction="UnwindBackToPlayer:"/>
+                                <segue id="1059" destination="1050" kind="unwind" unwindAction="UnwindBackToPlayer:" identifier="backToPlayer"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

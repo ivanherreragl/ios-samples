@@ -119,9 +119,9 @@ namespace AVMetadataRecordPlay
 		}
 
 
-        // MARK: Photo Library
+		#region Photo Library
 
-        PHCachingImageManager ImageManager;
+		PHCachingImageManager ImageManager;
 
         private void SetUpPhotoLibrary(){
             ImageManager = new PHCachingImageManager();
@@ -199,16 +199,18 @@ namespace AVMetadataRecordPlay
 
 	    }
 
-        // MARK: Asset Management
+		#endregion
+
+		#region Asset Management
 
 
-        CGSize AssetGridThumbnailSize = CGSize.Empty;
+		CGSize AssetGridThumbnailSize = CGSize.Empty;
 
         PHFetchResult AssetsFetchResult;
 
         CGRect previousPreheatRect = CGRect.Empty;
 
-        int AssetRequestID = 0; //PHInvalidImageRequestID FIND THE KEY
+        int AssetRequestID = 0; //PHInvalidImageRequestID 
 
         UIAlertController LoadingAssetAlertController = null;
 
@@ -298,7 +300,9 @@ namespace AVMetadataRecordPlay
 			};
 		}
 
-		// MARK: Collection View
+		#endregion
+
+		#region Collection View
 
 		public override nint GetItemsCount(UICollectionView collectionView, nint section)
 		{
@@ -393,7 +397,9 @@ namespace AVMetadataRecordPlay
 
         }
 
-		public override void DidReceiveMemoryWarning()
+        #endregion
+
+        public override void DidReceiveMemoryWarning()
         {
             base.DidReceiveMemoryWarning();
             // Release any cached data, images, etc that aren't in use.

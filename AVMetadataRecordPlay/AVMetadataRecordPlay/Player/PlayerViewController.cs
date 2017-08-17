@@ -57,27 +57,10 @@ namespace AVMetadataRecordPlay.Player
 
 		}
 
-        // MARK: Segue
-
-        /*
+		#region Segue
 
 
-    @IBAction func unwindBackToPlayer(segue: UIStoryboardSegue) {
-        // Pull any data from the view controller which initiated the unwind segue.
-        let assetGridViewController = segue.source as! AssetGridViewController
-        if let selectedAsset = assetGridViewController.selectedAsset {
-            if selectedAsset != playerAsset {
-                setUpPlayback(for: selectedAsset)
-                playerAsset = selectedAsset
-            }
-        }
-    }
-          
-         
-         */
-
-
-        [Action("UnwindBackToPlayer:")]
+		[Action("UnwindBackToPlayer:")]
         public void UnwindBackToPlayer(UIStoryboardSegue segue)
         {
             var assetGridViewController = (AssetGridViewController)segue.SourceViewController;
@@ -90,7 +73,9 @@ namespace AVMetadataRecordPlay.Player
             }
         }
 
-		// MARK: Player
+		#endregion
+
+		#region Player
 
 		AVPlayer Player;
 
@@ -241,9 +226,11 @@ namespace AVMetadataRecordPlay.Player
             PauseButton.Enabled = false;
 		}
 
-        // MARK: Timed Metadata
+		#endregion
 
-        AVPlayerItemMetadataOutput ItemMetadataOutput = new AVPlayerItemMetadataOutput(null);
+		#region Timed Metadata
+
+		AVPlayerItemMetadataOutput ItemMetadataOutput = new AVPlayerItemMetadataOutput(null);
 
         bool HonorTimedMetadataTracksDuringPlayback = false;
 
@@ -371,9 +358,9 @@ namespace AVMetadataRecordPlay.Player
             }
         }
 
-        // MARK: Animation Utilities
 
-        private void RemoveAllSublayers(CALayer layer)
+
+		private void RemoveAllSublayers(CALayer layer)
         {
             CATransaction.Begin();
             CATransaction.DisableActions = true;
@@ -397,7 +384,11 @@ namespace AVMetadataRecordPlay.Player
             return false;
         }
 
-		// MARK: Animation Utilities
+		#endregion
+
+
+
+		#region Animation Utilities
 
 		public CGAffineTransform AffineTransform(CGImagePropertyOrientation videoOrientation, CGSize videoDimensions){
             var transform = CGAffineTransform.MakeIdentity();
@@ -502,7 +493,9 @@ namespace AVMetadataRecordPlay.Player
             }
         }
 
-		public override void DidReceiveMemoryWarning()
+        #endregion
+
+        public override void DidReceiveMemoryWarning()
         {
             base.DidReceiveMemoryWarning();
             // Release any cached data, images, etc that aren't in use.
