@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Photos\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -104,6 +105,28 @@
     <Compile Include="ViewController.designer.cs">
       <DependentUpon>ViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ContactsTableViewController.cs" />
+    <Compile Include="ContactsTableViewController.designer.cs">
+      <DependentUpon>ContactsTableViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ContactDetailViewController.cs" />
+    <Compile Include="ContactDetailViewController.designer.cs">
+      <DependentUpon>ContactDetailViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ContactCard.cs" />
+    <Compile Include="Attachment.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Photos\Profile1.png" />
+    <BundleResource Include="Photos\Profile2.png" />
+    <BundleResource Include="Photos\Profile3.png" />
+    <BundleResource Include="Photos\Profile4.png" />
+    <BundleResource Include="Photos\Profile5.png" />
+    <BundleResource Include="Photos\Profile6.png" />
+    <BundleResource Include="Photos\Profile7.png" />
+    <BundleResource Include="Photos\Profile8.png" />
+    <BundleResource Include="Photos\Profile9.png" />
+    <BundleResource Include="Photos\Profile10.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
