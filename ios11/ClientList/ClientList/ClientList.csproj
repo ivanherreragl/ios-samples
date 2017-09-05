@@ -89,6 +89,7 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Photos\" />
+    <Folder Include="Attachments\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -131,6 +132,9 @@
     <BundleResource Include="Photos\Profile8.png" />
     <BundleResource Include="Photos\Profile9.png" />
     <BundleResource Include="Photos\Profile10.png" />
+    <BundleResource Include="Attachments\John Doe Data.jpg" />
+    <BundleResource Include="Attachments\Lady J Data.jpg" />
+    <BundleResource Include="Attachments\Mr Z Data.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
