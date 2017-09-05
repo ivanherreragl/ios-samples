@@ -59,14 +59,50 @@ namespace ClientList
         }
 
         public UIDragItem[] GetItemsForBeginningDragSession(UITableView tableView, IUIDragSession session, Foundation.NSIndexPath indexPath){
-            
+            var contactCard = ContactCards[indexPath.Row];
+            var dragItem = new UIDragItem(new NSItemProvider(contactCard));
+            return new UIDragItem[] { dragItem };
+
         }
+
+		public override nint RowsInSection(UITableView tableView, nint section)
+		{
+            return ContactCards.Count;
+		}
+
+		public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
+		{
+			UITableViewCell cell = tableView.DequeueReusableCell("contactNameCell");
+			
+			//---- if there are no cells to reuse, create a new one
+			if (cell == null)
+			{ cell = new UITableViewCell(UITableViewCellStyle.Default, "contactNameCell"); }
+
+            cell.TextLabel.Text = ContactCards[indexPath.Row].Name;
+
+			return cell;
+		}
+
+
 
         public override void DidReceiveMemoryWarning()
         {
             base.DidReceiveMemoryWarning();
             // Release any cached data, images, etc that aren't in use.
         }
+
+		public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
+		{
+            if (segue.Identifier == "detailsSegue"){
+                var detailsViewController = (ContactDetailViewController)segue.DestinationViewController;
+                var contactCard = ContactCards[TableView.IndexPathForSelectedRow.Row];
+                detailsViewController.TheContactCard = contactCard;
+
+            }
+
+
+
+		}
 
         public void DisplayError(NSError err){
             var alert = UIAlertController.Create("Unable to load object", err.LocalizedDescription, UIAlertControllerStyle.Alert);
