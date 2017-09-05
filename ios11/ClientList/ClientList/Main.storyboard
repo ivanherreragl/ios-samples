@@ -22,7 +22,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue id="487" destination="445" kind="show"/>
+                                    <segue id="487" destination="445" kind="show" identifier="detailsSegue"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -126,11 +126,11 @@
                         </subviews>
                     </view>
                     <connections>
-                        <outlet property="ContactPhoto" destination="489" id="name-outlet-489"/>
                         <outlet property="NameLabel" destination="492" id="name-outlet-492"/>
                         <outlet property="PhoneLabel" destination="494" id="name-outlet-494"/>
                         <outlet property="AttachmentImageButton" destination="495" id="name-outlet-495"/>
                         <outlet property="ViewDataButton" destination="497" id="name-outlet-497"/>
+                        <outlet property="ContactPhoto" destination="490" id="name-outlet-490"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="447" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -138,4 +138,16 @@
             <point key="canvasLocation" x="986" y="-114"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Photos/Profile1.png" width="240" height="240"/>
+        <image name="Photos/Profile2.png" width="240" height="240"/>
+        <image name="Photos/Profile3.png" width="240" height="240"/>
+        <image name="Photos/Profile4.png" width="240" height="240"/>
+        <image name="Photos/Profile5.png" width="240" height="240"/>
+        <image name="Photos/Profile6.png" width="240" height="240"/>
+        <image name="Photos/Profile7.png" width="240" height="240"/>
+        <image name="Photos/Profile8.png" width="240" height="240"/>
+        <image name="Photos/Profile9.png" width="240" height="240"/>
+        <image name="Photos/Profile10.png" width="240" height="240"/>
+    </resources>
 </document>

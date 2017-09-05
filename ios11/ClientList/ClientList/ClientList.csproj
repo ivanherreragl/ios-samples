@@ -115,6 +115,10 @@
     </Compile>
     <Compile Include="ContactCard.cs" />
     <Compile Include="Attachment.cs" />
+    <Compile Include="PurchaseDetailViewController.cs" />
+    <Compile Include="PurchaseDetailViewController.designer.cs">
+      <DependentUpon>PurchaseDetailViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Photos\Profile1.png" />

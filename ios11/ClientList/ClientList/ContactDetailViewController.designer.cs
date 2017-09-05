@@ -20,7 +20,7 @@ namespace ClientList
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIStackView ContactPhoto { get; set; }
+        UIKit.UIImageView ContactPhoto { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
