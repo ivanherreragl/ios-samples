@@ -90,6 +90,7 @@
     <Folder Include="Resources\" />
     <Folder Include="Photos\" />
     <Folder Include="Attachments\" />
+    <Folder Include="ClientAttachments\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -120,6 +121,9 @@
     <Compile Include="PurchaseDetailViewController.designer.cs">
       <DependentUpon>PurchaseDetailViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ClientAttachments\FileProviderExtension.cs" />
+    <Compile Include="ClientAttachments\FileProviderItem.cs" />
+    <Compile Include="ClientAttachments\FileProviderEnumerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Photos\Profile1.png" />
