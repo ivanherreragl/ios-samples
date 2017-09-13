@@ -24,7 +24,21 @@ namespace ClientList
         }
 
         public void EnumerateItems(INSFileProviderEnumerationObserver observer, NSData page){
-            //if (page == )
+            if (page == NSData.FromString("initialPageSortedByName") || page == NSData.FromString("initialPageSortedByData"))
+            { //Use Bound Constants instead
+                NSArray properties = NSArray.FromNSObjects(NSUrl.NameKey);
+                NSError err;
+                var contents = NSFileManager.DefaultManager.GetDirectoryContent(Attachment.DirectoryURL(), properties, (NSDirectoryEnumerationOptions.SkipsSubdirectoryDescendants | NSDirectoryEnumerationOptions.SkipsHiddenFiles), out err);
+                if (err == null){
+					foreach (NSUrl url in contents)
+					{
+						//observer.DidEnumerateItems();
+					}
+                }
+
+            }
+            NSData op = null;
+            observer.FinishEnumerating(op);
         }
 
         public void EnumerateChanges(INSFileProviderEnumerationObserver observer, NSData anchor){

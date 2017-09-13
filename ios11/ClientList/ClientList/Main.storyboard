@@ -149,5 +149,8 @@
         <image name="Photos/Profile8.png" width="240" height="240"/>
         <image name="Photos/Profile9.png" width="240" height="240"/>
         <image name="Photos/Profile10.png" width="240" height="240"/>
+        <image name="Attachments/John Doe Data.jpg" width="1237" height="709"/>
+        <image name="Attachments/Lady J Data.jpg" width="1213" height="611"/>
+        <image name="Attachments/Mr Z Data.jpg" width="1212" height="613"/>
     </resources>
 </document>

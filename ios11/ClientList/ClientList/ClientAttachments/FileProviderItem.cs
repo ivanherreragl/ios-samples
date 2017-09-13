@@ -4,7 +4,7 @@ using UIKit;
 using Foundation;
 using MobileCoreServices;
 
-namespace ClientAttachments
+namespace ClientList
 {
     public class FileProviderItem: NSObject, INSFileProviderItem
     {

@@ -22,7 +22,7 @@ namespace ClientList
 
 
             NameLabel.Text = TheContactCard.Name;
-            PhoneLabel.Text = TheContactCard.Phone;
+            PhoneLabel.Text = TheContactCard.PhoneNumber;
             ContactPhoto.Image = TheContactCard.Photo;
 
             Title = TheContactCard.Name;
@@ -47,7 +47,7 @@ namespace ClientList
             NavigationController.PushViewController(purchaseInfoViewController, true);
 		}
 
-		public UIDragItem[] GetItemsForBeginningDragSession(UITableView tableView, IUIDragSession session, Foundation.NSIndexPath indexPath)
+		public UIDragItem[] GetItemsForBeginningSession(UIDragInteraction interaction, IUIDragSession session)
 		{
             var itemProvider = new NSItemProvider();
             itemProvider.RegisterFileRepresentation(UTType.JPEG, NSItemProviderFileOptions.OpenInPlace, NSItemProviderRepresentationVisibility.All,(completionHandler) => {
